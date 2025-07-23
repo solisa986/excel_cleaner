@@ -2,7 +2,10 @@ import openpyxl
 from pathlib import Path
 import pandas as pd
 import streamlit as st
-from io import BytesIO
+import io
+
+# buffer to use for excel writer
+buffer = io.BytesIO()
 
 st.title("Excel Cleanup App")
 
@@ -26,11 +29,9 @@ if uploaded_file is not None:
         worksheet = workbook[f'{sheet_name}']
 
         table_list = list(worksheet.tables.keys())
-        print(table_list)
-
-        extracted_table = []
-        for t in table_list:
-            lookup_table = worksheet.tables[f'{t}']
+        table = st.selectbox("Please choose which table contains the data that needs to be extracted: ", table_list, index=None)
+        if table is not None:
+            lookup_table = worksheet.tables[f'{table}']
             lookup_range = lookup_table.ref
 
             # Access the data in the table range
@@ -47,7 +48,31 @@ if uploaded_file is not None:
 
             # Create a pandas dataframe from the rows_list.
             # The first row is the column names
+            st.write(f"Successfully pulled in the data from table '{table}'. Showing the top 10 records below:")
             df = pd.DataFrame(data=rows_list[1:], index=None, columns=rows_list[0])
-            st.write(df)
-            st.write(df.columns)
-            # filtered_df = df.filter(items=[])
+            st.write(df.head(10))
+            column_list = list(df.columns)
+            columns_selected = st.multiselect("Please choose which columns you would like to keep in your cleaned Excel file: ", column_list, index=None)
+            if columns_selected is not None:
+                st.write("Building a new excel file...")
+                filtered_df = df[columns_selected]
+                df_csv = filtered_df.to_csv(index=False).encode('utf-8')
+                # download button 1 to download dataframe as csv
+                download1 = st.download_button(
+                    label="Download data as CSV",
+                    data=df_csv,
+                    file_name='large_df.csv',
+                    mime='text/csv'
+                )
+
+                # download button 2 to download dataframe as xlsx
+                with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                    # Write each dataframe to a different worksheet.
+                    filtered_df.to_excel(writer, sheet_name=f'{sheet_name}', index=False)
+
+                    download2 = st.download_button(
+                        label="Download data as Excel",
+                        data=buffer,
+                        file_name=f'{table}_cleaned.xlsx',
+                        mime='application/vnd.ms-excel'
+                    )
