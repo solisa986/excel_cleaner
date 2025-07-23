@@ -56,6 +56,7 @@ if uploaded_file is not None:
             column_list = list(df.columns.values)
             columns_selected = st.multiselect("Please choose which columns you would like to keep in your cleaned Excel file IN THE EXACT ORDER THAT YOU WANT IT TO APPEAR IN THE FILE: ", column_list, default=None)
             if len(columns_selected) != 0:
+                filename = st.text("Please input the name of the new cleaned file. Do not include the '.csv' file extension: ")
                 st.write("Building a new excel file...")
                 filtered_df = df[columns_selected]
                 df_csv = filtered_df.to_csv(index=False).encode('utf-8')
@@ -63,18 +64,6 @@ if uploaded_file is not None:
                 download1 = st.download_button(
                     label="Download data as CSV",
                     data=df_csv,
-                    file_name='large_df.csv',
+                    file_name=f'{filename}.csv',
                     mime='text/csv'
                 )
-
-                # download button 2 to download dataframe as xlsx
-                with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-                    # Write each dataframe to a different worksheet.
-                    filtered_df.to_excel(writer, sheet_name=f'{sheet_name}', index=False)
-
-                    download2 = st.download_button(
-                        label="Download data as Excel",
-                        data=buffer,
-                        file_name=f'{table}_cleaned.xlsx',
-                        mime='application/vnd.ms-excel'
-                    )
