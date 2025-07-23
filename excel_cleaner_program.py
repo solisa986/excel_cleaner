@@ -8,8 +8,8 @@ from io import BytesIO
 # buffer to use for excel writer
 buffer = io.BytesIO()
 
-st.title("Excel Cleanup App")
-
+st.title("Excel Data Extraction App")
+st.subheader("Welcome to the data extraction application! This app will accept a file, search for any tables in the file, and allow you to choose which columns you would like to be extracted into a new file! To start, simply upload your Excel file below :)")
 uploaded_file = st.file_uploader("Choose an Excel file", type=["xlsx"])
 
 # Check if a file has been uploaded
@@ -63,8 +63,9 @@ if uploaded_file is not None:
                     df_csv = filtered_df.to_csv(index=False).encode('utf-8')
                     # download button 1 to download dataframe as csv
                     download1 = st.download_button(
-                        label="Download data as CSV",
+                        label="Download CSV file",
                         data=df_csv,
                         file_name=f'{filename}.csv',
                         mime='text/csv'
                     )
+                    st.write("To re-use this page, please refresh the tab :)")
