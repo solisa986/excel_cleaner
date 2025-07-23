@@ -52,7 +52,7 @@ if uploaded_file is not None:
             st.write(f"Successfully pulled in the data from table '{table}'. Showing the top 10 records below:")
             df = pd.DataFrame(data=rows_list[1:], index=None, columns=rows_list[0])
             st.write(df.head(10))
-            column_list = list(df.columns)
+            column_list = list(df.columns.values)
             columns_selected = st.multiselect("Please choose which columns you would like to keep in your cleaned Excel file: ", column_list, index=None)
             if columns_selected is not None:
                 st.write("Building a new excel file...")
