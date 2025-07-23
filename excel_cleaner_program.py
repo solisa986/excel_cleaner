@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 import io
+from io import BytesIO
 
 # buffer to use for excel writer
 buffer = io.BytesIO()
@@ -17,7 +18,7 @@ if uploaded_file is not None:
     file_contents = uploaded_file.getvalue()
 
     # Load the workbook from the BytesIO object using openpyxl
-    workbook = openpyxl.load_workbook(buffer(file_contents))
+    workbook = openpyxl.load_workbook(BytesIO(file_contents))
 
     st.write("Successfully linked the workbook!")
     # Get the list of sheet names
