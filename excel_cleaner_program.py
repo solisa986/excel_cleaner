@@ -53,7 +53,7 @@ if uploaded_file is not None:
             df = pd.DataFrame(data=rows_list[1:], index=None, columns=rows_list[0])
             st.write(df.head(10))
             column_list = list(df.columns.values)
-            columns_selected = st.multiselect("Please choose which columns you would like to keep in your cleaned Excel file: ", column_list, index=None)
+            columns_selected = st.multiselect("Please choose which columns you would like to keep in your cleaned Excel file: ", column_list, default=None)
             if columns_selected is not None:
                 st.write("Building a new excel file...")
                 filtered_df = df[columns_selected]
