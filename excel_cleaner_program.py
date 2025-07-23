@@ -9,7 +9,7 @@ from io import BytesIO
 buffer = io.BytesIO()
 
 st.title("Excel Data Extraction App")
-st.subheader("Welcome to the data extraction application! This app will accept a file, search for any tables in the file, and allow you to choose which columns you would like to be extracted into a new file! To start, simply upload your Excel file below :)")
+st.text("Welcome to the data extraction application! This app will accept a file, search for any tables in the file, and allow you to choose which columns you would like to be extracted into a new file! To start, simply upload your Excel file below :)")
 uploaded_file = st.file_uploader("Choose an Excel file", type=["xlsx"])
 
 # Check if a file has been uploaded
