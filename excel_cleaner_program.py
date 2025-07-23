@@ -17,7 +17,7 @@ if uploaded_file is not None:
     file_contents = uploaded_file.getvalue()
 
     # Load the workbook from the BytesIO object using openpyxl
-    workbook = openpyxl.load_workbook(BytesIO(file_contents))
+    workbook = openpyxl.load_workbook(buffer(file_contents))
 
     st.write("Successfully linked the workbook!")
     # Get the list of sheet names
