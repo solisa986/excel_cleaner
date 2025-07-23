@@ -54,7 +54,7 @@ if uploaded_file is not None:
             st.write(df.head(10))
             column_list = list(df.columns.values)
             columns_selected = st.multiselect("Please choose which columns you would like to keep in your cleaned Excel file: ", column_list, default=None)
-            if columns_selected is not None:
+            if len(columns_selected) != 0:
                 st.write("Building a new excel file...")
                 filtered_df = df[columns_selected]
                 df_csv = filtered_df.to_csv(index=False).encode('utf-8')
