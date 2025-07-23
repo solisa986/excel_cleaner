@@ -2,13 +2,28 @@ import openpyxl
 from pathlib import Path
 import pandas as pd
 import streamlit as st
+from io import BytesIO
 
-workbook_name = input("Please enter the name of the workbook (Note: only accepts .xlsx files): ").replace(".xlsx", "")
-# Load the Excel file
-workbook = openpyxl.load_workbook(f'C:/Users/agarcia/Scripts - Adriana/Uncleaned Excel Files/{workbook_name}.xlsx')
+st.title("Excel Cleanup App")
 
-sheet_name = input("Please enter the name of the sheet that needs to be cleaned: ")
+uploaded_file = st.file_uploader('Please upload the file that you need cleaned up')
+if uploaded_file is not None:
+    # Create a file uploader widget
+    uploaded_file = st.file_uploader("Choose an Excel file", type=["xlsx"])
 
+    # Check if a file has been uploaded
+    if uploaded_file is not None:
+        # Read the uploaded file as a BytesIO object
+        file_contents = uploaded_file.getvalue()
+
+        # Load the workbook from the BytesIO object using openpyxl
+        workbook = openpyxl.load_workbook(BytesIO(file_contents))
+
+st.write("Successfully linked the workbook!")
+# Get the list of sheet names
+sheet_names_list = workbook.sheetnames
+
+sheet_name = st.selectbox("Found the following sheets in the uploaded workbook. Please choose which one contains the data to be extracted: ", sheet_names_list, index=None)
 # Select the worksheet by name
 worksheet = workbook[f'{sheet_name}']
 
@@ -35,7 +50,6 @@ for t in table_list:
     # Create a pandas dataframe from the rows_list.
     # The first row is the column names
     df = pd.DataFrame(data=rows_list[1:], index=None, columns=rows_list[0])
-    print("Found the following columns in your table.")
-    print("Please ")
-    filtered_df = df.filter(items=[])
-    print(df)
+    st.write(df)
+    st.write(df.columns)
+    # filtered_df = df.filter(items=[])
