@@ -50,7 +50,8 @@ if uploaded_file is not None:
             # Create a pandas dataframe from the rows_list.
             # The first row is the column names
             st.write(f"Successfully pulled in the data from table '{table}'. Showing the top 10 records below:")
-            df = pd.DataFrame(data=rows_list[1:], index=None, columns=rows_list[0])
+            df_orig = pd.DataFrame(data=rows_list[1:], index=None, columns=rows_list[0])
+            df = df_orig.dropna(axis=1, how='all')
             st.write(df.head(10))
             column_list = list(df.columns.values)
             columns_selected = st.multiselect("Please choose which columns you would like to keep in your cleaned Excel file IN THE EXACT ORDER THAT YOU WANT IT TO APPEAR IN THE FILE: ", column_list, default=None)
