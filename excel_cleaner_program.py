@@ -58,7 +58,7 @@ if uploaded_file is not None:
             if len(columns_selected) != 0:
                 filename = st.text_input("Please input the name of the new cleaned file. Do not include the '.csv' file extension: ", value="")
                 if len(filename) != 0:
-                    st.write("Building a new file...")
+                    st.write("Successfully built the new file! Please download below.")
                     filtered_df = df[columns_selected]
                     df_csv = filtered_df.to_csv(index=False).encode('utf-8')
                     # download button 1 to download dataframe as csv
